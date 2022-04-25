@@ -40,9 +40,16 @@ app.post("/tweets", (req, res) => {
 });
 
 app.get("/tweets", (req, res) => {
-    //get last ten items in tweets
-    const lastTenTweets = tweets.slice(-10);
-    res.send(lastTenTweets);
+    const page = req.query.page;
+    if(!page || page < 1){res.status(400).send("Informe uma página válida!")};
+
+    const end = (page) * 10;
+    const start = (page - 1) * 10;
+
+    const tweetsPage = tweets.slice(start, end);
+    if (tweetsPage.length > 0) {
+        res.send(tweetsPage);
+    }
 });
 
 app.get("/tweets/:username", (req, res) => {

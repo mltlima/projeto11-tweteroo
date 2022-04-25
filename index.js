@@ -26,12 +26,13 @@ app.post("/sign-up", (req, res) => {
 
 app.post("/tweets", (req, res) => {
     const body = req.body;
+    const header = req.headers;
 
-    if (body.username == "" || body.tweet == "") {
+    if (header.user == "" || body.tweet == "") {
         res.status(400).send("Todos os campos são obrigatórios!");
     } else {
         const tweet = {
-            username: body.username,
+            username: header.user,
             tweet: body.tweet
         };
         tweets.push(tweet);
@@ -41,7 +42,7 @@ app.post("/tweets", (req, res) => {
 
 app.get("/tweets", (req, res) => {
     const page = req.query.page;
-    if(!page || page < 1){res.status(400).send("Informe uma página válida!")};
+    if(page < 1){res.status(400).send("Informe uma página válida!")};
 
     const end = (page) * 10;
     const start = (page - 1) * 10;
